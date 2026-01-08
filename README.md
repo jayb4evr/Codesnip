@@ -284,6 +284,21 @@ This repository is configured for easy deployment on Render with both frontend a
 5. Update Google OAuth redirect URI to: `https://your-app-name.onrender.com/api/auth/google/callback`
 6. Deploy
 
+#### Deployment Checklist
+
+Before deploying, make sure you have:
+
+- [ ] MongoDB Atlas cluster set up with connection string
+- [ ] Google OAuth credentials (Client ID and Secret)
+- [ ] Google OAuth redirect URI updated to your Render URL
+- [ ] Google Gemini API key
+- [ ] All environment variables configured in Render dashboard
+
+**Important Notes:**
+- The free tier on Render may spin down after inactivity (slower initial load)
+- Make sure to set `NODE_ENV=production` for optimal performance
+- OAuth callback URL format: `https://your-app-name.onrender.com/api/auth/google/callback`
+
 #### Database Setup (MongoDB Atlas)
 
 1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)

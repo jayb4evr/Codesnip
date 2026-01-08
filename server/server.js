@@ -87,14 +87,6 @@ io.on('connection', (socket) => {
   });
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error('Error:', err);
-  res.status(err.status || 500).json({
-    error: err.message || 'Internal server error'
-  });
-});
-
 // Handle React routing in production - return all non-API requests to React app
 if (process.env.NODE_ENV === 'production') {
   app.get('*', (req, res) => {
@@ -106,6 +98,14 @@ if (process.env.NODE_ENV === 'production') {
     res.status(404).json({ error: 'Route not found' });
   });
 }
+
+// Error handling middleware (must be last)
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(err.status || 500).json({
+    error: err.message || 'Internal server error'
+  });
+});
 
 const PORT = process.env.PORT || 5000;
 
