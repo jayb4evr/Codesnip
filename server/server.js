@@ -7,6 +7,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const session = require('express-session');
 const passport = require('./config/passport');
+const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
@@ -64,6 +65,11 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Serve static files from React app in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/dist')));
+}
+
 // Socket.io for real-time typing indicators
 io.on('connection', (socket) => {
   console.log('Client connected:', socket.id);
@@ -89,10 +95,17 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ error: 'Route not found' });
-});
+// Handle React routing in production - return all non-API requests to React app
+if (process.env.NODE_ENV === 'production') {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+  });
+} else {
+  // 404 handler for development
+  app.use((req, res) => {
+    res.status(404).json({ error: 'Route not found' });
+  });
+}
 
 const PORT = process.env.PORT || 5000;
 

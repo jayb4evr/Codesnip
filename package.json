@@ -1,0 +1,15 @@
+{
+  "name": "codesnip-monorepo",
+  "version": "1.0.0",
+  "description": "Code Explainer - MERN Stack AI-Powered Code Analysis",
+  "scripts": {
+    "install:client": "cd client && npm install",
+    "install:server": "cd server && npm install",
+    "build:client": "cd client && npm run build",
+    "build": "npm run install:client && npm run install:server && npm run build:client",
+    "start": "cd server && npm start"
+  },
+  "keywords": ["mern", "code-explainer", "gemini-api"],
+  "author": "",
+  "license": "MIT"
+}
