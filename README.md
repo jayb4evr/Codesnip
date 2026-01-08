@@ -244,7 +244,72 @@ npm test
 
 ## 🌐 Deployment
 
-### Frontend (Vercel)
+### Render (Full Stack - Frontend + Backend)
+
+This repository is configured for easy deployment on Render with both frontend and backend in a single service.
+
+#### Option 1: Deploy with render.yaml (Recommended)
+
+1. Push your code to GitHub
+2. Go to [Render Dashboard](https://dashboard.render.com)
+3. Click "New" → "Blueprint"
+4. Connect your GitHub repository
+5. Render will automatically detect the `render.yaml` file
+6. Set the required environment variables:
+   - `MONGODB_URI`: Your MongoDB connection string (use MongoDB Atlas)
+   - `GOOGLE_CLIENT_ID`: Your Google OAuth Client ID
+   - `GOOGLE_CLIENT_SECRET`: Your Google OAuth Client Secret
+   - `GEMINI_API_KEY`: Your Google Gemini API key
+7. Update Google OAuth redirect URI to: `https://your-app-name.onrender.com/api/auth/google/callback`
+8. Click "Apply" to deploy
+
+#### Option 2: Manual Deployment
+
+1. Create a new Web Service on [Render](https://render.com)
+2. Connect your GitHub repository
+3. Configure the service:
+   - **Name**: codesnip (or your preferred name)
+   - **Environment**: Node
+   - **Build Command**: `npm run build`
+   - **Start Command**: `npm start`
+4. Add environment variables in Render dashboard:
+   - `NODE_ENV`: production
+   - `MONGODB_URI`: Your MongoDB connection string
+   - `GOOGLE_CLIENT_ID`: Your Google OAuth Client ID
+   - `GOOGLE_CLIENT_SECRET`: Your Google OAuth Client Secret
+   - `GEMINI_API_KEY`: Your Google Gemini API key
+   - `CLIENT_URL`: https://your-app-name.onrender.com
+   - `JWT_SECRET`: (auto-generated or your secret)
+   - `SESSION_SECRET`: (auto-generated or your secret)
+5. Update Google OAuth redirect URI to: `https://your-app-name.onrender.com/api/auth/google/callback`
+6. Deploy
+
+#### Deployment Checklist
+
+Before deploying, make sure you have:
+
+- [ ] MongoDB Atlas cluster set up with connection string
+- [ ] Google OAuth credentials (Client ID and Secret)
+- [ ] Google OAuth redirect URI updated to your Render URL
+- [ ] Google Gemini API key
+- [ ] All environment variables configured in Render dashboard
+
+**Important Notes:**
+- The free tier on Render may spin down after inactivity (slower initial load)
+- Make sure to set `NODE_ENV=production` for optimal performance
+- OAuth callback URL format: `https://your-app-name.onrender.com/api/auth/google/callback`
+
+#### Database Setup (MongoDB Atlas)
+
+1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+2. Create a free cluster
+3. Create a database user
+4. Whitelist all IPs (0.0.0.0/0) for Render access
+5. Get your connection string and add it to Render's environment variables
+
+### Alternative: Separate Deployments
+
+#### Frontend (Vercel)
 
 1. Install Vercel CLI:
 ```bash
@@ -257,9 +322,11 @@ cd client
 vercel
 ```
 
-3. Set environment variables in Vercel dashboard
+3. Set environment variables in Vercel dashboard:
+   - `VITE_API_URL`: Your backend API URL
+   - `VITE_SOCKET_URL`: Your backend Socket.io URL
 
-### Backend (Render)
+#### Backend (Render)
 
 1. Create a new Web Service on [Render](https://render.com)
 2. Connect your GitHub repository
